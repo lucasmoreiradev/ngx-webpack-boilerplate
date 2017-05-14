@@ -2,7 +2,7 @@
 
 It's very easy, just follow the steps below:
 
-`instal node v7`
+`install node v7`
 
 `clone this project`
 
