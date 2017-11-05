@@ -1,12 +1,43 @@
 'use strict'
 
 const path = require('path')
+const HappyPack = require('happypack');
 const webpack = require('webpack')
-
+const sharedHappyThreads = HappyPack.ThreadPool({ size: 1 });
 let devtool
 
 const entryPoints = [ path.join(__dirname, 'client', 'main.js') ]
 const plugins = [
+  new HappyPack({
+    id: 'ts/js',
+    loaders: [ 'ts-loader' ],
+    threadPool: sharedHappyThreads,
+    threads: 1,
+  }),
+  new HappyPack({
+    id: 'raw',
+    loaders: [ 'raw-loader' ],
+    threadPool: sharedHappyThreads,
+    threads: 1 
+  }),
+  new HappyPack({
+    id: 'pure-css',
+    loaders: [ 'css-loader'],
+    threadPool: sharedHappyThreads,
+    threads: 1
+  }),
+  new HappyPack({
+    id: 'sass',
+    loaders: [ 'sass-loader'],
+    threadPool: sharedHappyThreads,
+    threads: 1
+  }),
+  new HappyPack({
+    id: 'files',
+    loaders: [ 'file-loader'],
+    threadPool: sharedHappyThreads,
+    threads: 1
+  }),
   new webpack.DefinePlugin({
     __PROD__: process.env.NODE_ENV === 'production'
   }),
@@ -56,7 +87,13 @@ module.exports = {
         test: /\.(js|ts)$/,
         exclude: /node_modules/,
         use: [
-          { loader: 'awesome-typescript-loader' }
+          { 
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              happyPackMode: true
+            }
+          }
         ]
       },
       { test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/, use: 'file-loader' },
@@ -67,3 +104,4 @@ module.exports = {
   },
   plugins: plugins
 }
+

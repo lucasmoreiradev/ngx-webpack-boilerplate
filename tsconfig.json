@@ -14,7 +14,8 @@
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "strictNullChecks": false,
-    "types": []
+    "types": [],
+    "pretty": true
   },
   "files": [],
   "exclude": [
